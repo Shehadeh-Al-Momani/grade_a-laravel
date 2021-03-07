@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
- 
+
 use Illuminate\Support\Facades\DB;
- use App\Models\Course;
+use App\Models\Course;
 
 
 class Courses extends Controller
@@ -14,7 +14,9 @@ class Courses extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllCourses()
+
+    // View all courses
+    public function index()
     {
         // $sql = 'select * from courses';
         // $courses = DB::select($sql);
@@ -26,7 +28,8 @@ class Courses extends Controller
         return $courses;
     }
 
-    public function courseDetails($id)
+    // View a specific course's details
+    public function show($id)
     {
         // $sql = 'select * from courses where id=?';
         // $course = DB::select($sql, [$id]);
@@ -34,7 +37,7 @@ class Courses extends Controller
         // $course = DB::table('courses')->where('id', $id)->get();
 
         // ORM 
-        $course = Course::where('id', $id)->get();
+        $course = Course::whereId($id)->get();
         return $course;
     }
 
@@ -93,14 +96,17 @@ class Courses extends Controller
         //  group by ra.course_id`;
         //         $courses = DB::select($sql);
 
-        $courses = DB::table('courses AS c')
-            ->join('users AS u', 'u.id', '=', 'c.instructor_id')
-            ->join('roles AS r', 'u.role_id', '=', 'r.id')->where('r.type', 'like', "instructor")
-            ->join('categories AS cat', 'c.category_id', '=', 'cat.id ')
-            ->join('rating AS ra', 'ra.course_id', '=', 'c.id ')
-            ->select('c.id as courseId', 'u.id as instructorID', 'cat.id as categoryId', 'c.name as course', 'c.price', 'c.description', 'c.img_url as img_course', 'c.created_at', 'u.name as instructor', 'u.adress', 'u.email', 'u.phone', 'cat.name as category')
-            ->groupBy('ra.course_id')
-            ->get();
+        // $courses = DB::table('courses AS c')
+        //     ->join('users AS u', 'u.id', '=', 'c.instructor_id')
+        //     ->join('roles AS r', 'u.role_id', '=', 'r.id')->where('r.type', 'like', "instructor")
+        //     ->join('categories AS cat', 'c.category_id', '=', 'cat.id ')
+        //     ->join('rating AS ra', 'ra.course_id', '=', 'c.id ')
+        //     ->select('c.id as courseId', 'u.id as instructorID', 'cat.id as categoryId', 'c.name as course', 'c.price', 'c.description', 'c.img_url as img_course', 'c.created_at', 'u.name as instructor', 'u.adress', 'u.email', 'u.phone', 'cat.name as category')
+        //     ->groupBy('ra.course_id')
+        //     ->get();
+
+        $courses = Course::with('category', 'user','rating')->get();
+
         return $courses;
     }
 }

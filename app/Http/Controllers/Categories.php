@@ -3,21 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Course;
+use Illuminate\Support\Facades\DB;
 
 class Categories extends Controller
 {
 
-    public function getAllCategories()
+    // View all categories
+    public function index()
     {
         // ORM 
         $categories = Category::all();
         return $categories;
     }
 
-    public function getCategoryCourses($id)
+    // View courses by category
+    public function show($id)
     {
         // ORM 
-        $category = Category::where('id', $id)->get();
-        return $category;
+        $courses = DB::table('categories')
+            ->join('courses', 'courses.category_id', '=', 'categories.id')
+            ->where('courses.category_id', $id)
+            ->get();
+
+        // $courses = Course::find($id)->courses();
+
+        return $courses;
     }
 }

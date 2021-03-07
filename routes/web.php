@@ -52,23 +52,57 @@ Route::get('/roles', function () {
     //  return view('sh7');
 });
 
+Route::get('/users', function () {
+    $users = User::all();
+    return $users;
+});
+
+Route::get('/users/{id}', function ($id) {
+    $users = DB::table('users')
+        ->join('roles', 'roles.id', '=', 'users.role_id')
+        ->where('roles.id', $id)
+        ->get();
+
+    // $users = User::find($id)->roles;
+    return $users;
+});
+
+Route::get('/try/{id}', function ($id) {
+    $course = Course::find($id)->videos;
+    $course = Course::find($id)->rating;
+    $course = Course::find($id)->registration;
+    $course = Course::find($id)->category;
+    $course = Course::find($id)->user;
+
+    $course = Course::find($id)->user;
+
+    // $course = Category::find($id)->courses;
+    $course = Course::find($id)->registration;
+    $course = User::with(relations: 'roles')->find($id);
+    $course = User::find($id)->rating;
+    $course = Course::with('category','user','','rating')->find($id);
+ 
+    return $course;
+});
+
+// Route::resource('/test', Test::class);
+// Route::resource('/courses', [Courses::class]);
+
 /*
 |-------------------------------------------------------------------------------
 | Students Routes
 |-------------------------------------------------------------------------------
  */
 
-// View all courses
-Route::get('/courses', 'App\Http\Controllers\Courses@getAllCourses');
-
-// View a specific course's details
-Route::get('/courses_details/{id}', [Courses::class, 'courseDetails']);
+Route::resources([
+    'test' => Test::class,
+    'courses' => Courses::class,
+    'categories' => Categories::class,
+    'instructors' => Instructors::class,
+]);
 
 // Search for courses
 Route::get('/search/{id}', [Courses::class, 'searchCourses']);
-
-// View all categories
-Route::get('/categories', [Categories::class, 'getAllCategories']);
 
 // Filter courses by rating value
 Route::get('/filter/{id}', [Courses::class, 'filterCourses']);
@@ -79,8 +113,8 @@ Route::get('/history/{id}', [Courses::class, 'historyCourses']);
 // Enrollment in multiple course
 Route::get('/add_course/{id}/{i}', [Courses::class, 'enrollmentCourse']); //send request with "student_id" in id params and "course_id" i params
 
-// View courses by category
-Route::get('/category_courses/{id}', [Categories::class, 'getCategoryCourses']);
+// View all courses instructors categories
+Route::get('/allCourses', [Courses::class, 'getAllCoursesInstructorsCategories']);
 
 // Evaluation(Star rating)
 Route::post('/evaluate/{c}/{s}/{r}', [Ratings::class, 'evaluate']); //send "course_id" in :c params, "student_id" in :s params, and "rating" in :r params
@@ -88,14 +122,5 @@ Route::post('/evaluate/{c}/{s}/{r}', [Ratings::class, 'evaluate']); //send "cour
 // Show all rating courses
 Route::get('/rating/{id}', [Ratings::class, 'getRating']); // id = "rating_value"
 
-// View all instructors
-Route::get('/instructors/{id}', [Instructors::class, 'getAllInstructors']); // in our project id=2 for instructors
-
 // View all courses by instructors
 Route::get('/instructor_courses/{id}', [Instructors::class, 'getAllCoursesByInstructor']); // id=instructor_id 
-
-// View one instructor
-Route::get('/instructor_datails/{id}', [Instructors::class, 'getInstructor']); // id=instructor_id 
-
-// View all courses instructors categories
-Route::get('/allCourses', [Courses::class, 'getAllCoursesInstructorsCategories']);

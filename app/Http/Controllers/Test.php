@@ -13,9 +13,9 @@ class Test extends Controller
      */
     public function index()
     {
-        $category = ['C++', 'Java', 'c#', 'C++', 'Java', 'c#'];
-
-        return $category;
+        // Route::get('/test')
+        $index = ["C++","Java","c#","C++","Java","c#"];
+        return $index ;
     }
 
     /**
@@ -25,7 +25,9 @@ class Test extends Controller
      */
     public function create()
     {
-        //
+        // Route::get('/test/create')
+        $create = ["create","create","create","create","create"];
+        return $create ;
     }
 
     /**
@@ -36,7 +38,9 @@ class Test extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Route::post('/test')
+        $store = ["store","store","store","store","store"];
+        return $store ;
     }
 
     /**
@@ -47,7 +51,9 @@ class Test extends Controller
      */
     public function show($id)
     {
-        //
+        // Route::get('/test/{id}')
+        $show = ["show0","show1","show2","show3","show4"];
+        return $show[$id] ;
     }
 
     /**
@@ -58,7 +64,9 @@ class Test extends Controller
      */
     public function edit($id)
     {
-        //
+        // Route::get('/test/{id}/edit')
+        $edit = ["edit0","edit1","edit2","edit3","edit4"];
+        return $edit[$id] ;
     }
 
     /**
@@ -70,7 +78,9 @@ class Test extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Route::put('/test/{id}')
+        $update = ["update0","update1","update2","update3","update4"];
+        return $update[$id] ;
     }
 
     /**
@@ -81,6 +91,8 @@ class Test extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Route::delete('/test/{id}')
+        $destroy = ["destroy","destroy","destroy","destroy","destroy"];
+        return $destroy ;
     }
 }
